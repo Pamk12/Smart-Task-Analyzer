@@ -188,4 +188,9 @@ With more time, we would implement:
   * **Visuals:** Critical Path visualization using D3.js.
 
 <img width="1877" height="664" alt="image" src="https://github.com/user-attachments/assets/87c1ba98-16ae-4955-8765-0fa11bd51863" />
+<img width="1779" height="610" alt="image" src="https://github.com/user-attachments/assets/062f2798-1055-48a8-9946-a1462bbee816" />
+<img width="787" height="759" alt="image" src="https://github.com/user-attachments/assets/c4fc8856-6a58-4c77-a50b-ee79e4d34cad" />
+
+
+
 
