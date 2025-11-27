@@ -187,3 +187,5 @@ With more time, we would implement:
   * **Export:** Download ranked lists as PDF/CSV.
   * **Visuals:** Critical Path visualization using D3.js.
 
+<img width="1877" height="664" alt="image" src="https://github.com/user-attachments/assets/87c1ba98-16ae-4955-8765-0fa11bd51863" />
+
