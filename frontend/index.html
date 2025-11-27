@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smart Task Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <div class="brand">
+        <div class="brand__logo" aria-hidden="true">⚡</div>
+        <div class="brand__title">Smart Task Analyzer</div>
+      </div>
+
+      <div class="topbar__right">
+        <button class="btn btn--ghost" id="copyApiBtn" title="Copy API URL" type="button">Copy API</button>
+        <button class="btn btn--primary" id="analyzeBtn" type="button">Analyze &amp; Prioritize</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container grid">
+    <section class="panel">
+      <div class="panel__header">
+        <h2 class="h2">Input</h2>
+        <div class="pill" id="backendStatus">
+          <span class="dot dot--idle"></span>
+          <span>Backend: not checked</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row row--between row--wrap">
+          <div class="label">Strategy</div>
+
+          <div class="segmented strategy-segmented" role="tablist" aria-label="Strategy selector">
+            <button class="segmented__btn" data-strategy="fastest_wins" role="tab" type="button">Fastest</button>
+            <button class="segmented__btn" data-strategy="high_impact" role="tab" type="button">Impact</button>
+            <button class="segmented__btn" data-strategy="deadline_driven" role="tab" type="button">Deadline</button>
+            <button class="segmented__btn is-active" data-strategy="smart_balance" role="tab" type="button">Balanced</button>
+          </div>
+
+          <div class="strategy-dropdown">
+            <div class="dd" id="strategyDD">
+              <button class="dd__btn" id="strategyDDBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span id="strategyDDLabel">Smart Balance</span>
+                <span class="dd__chev" aria-hidden="true">▾</span>
+              </button>
+              <div class="dd__menu" id="strategyDDMenu" role="listbox" aria-label="Strategy" tabindex="-1">
+                <button class="dd__item" type="button" data-value="fastest_wins">Fastest Wins</button>
+                <button class="dd__item" type="button" data-value="high_impact">High Impact</button>
+                <button class="dd__item" type="button" data-value="deadline_driven">Deadline Driven</button>
+                <button class="dd__item is-selected" type="button" data-value="smart_balance">Smart Balance</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row row--between row--wrap">
+          <h3 class="h3">Add a task</h3>
+          <button class="btn btn--ghost btn--sm" id="fillDemoBtn" type="button">Fill demo</button>
+        </div>
+
+        <div class="form-grid">
+          <label class="field">
+            <span class="field__label">Id</span>
+            <input class="input" id="id" type="number" placeholder="1" />
+          </label>
+
+          <label class="field">
+            <span class="field__label">Importance (1–10)</span>
+            <input class="input" id="importance" type="number" min="1" max="10" placeholder="8" />
+          </label>
+
+          <label class="field field--span2">
+            <span class="field__label">Title</span>
+            <input class="input" id="title" type="text" placeholder="Fix login bug" />
+          </label>
+
+          <label class="field">
+            <span class="field__label">Due date</span>
+            <input class="input" id="due_date" type="date" />
+          </label>
+
+          <label class="field">
+            <span class="field__label">Estimated hours</span>
+            <input class="input" id="estimated_hours" type="number" step="0.5" min="0" placeholder="3" />
+          </label>
+
+          <label class="field field--span2">
+            <span class="field__label">Dependencies (comma ids)</span>
+            <input class="input" id="dependencies" type="text" placeholder="6, 7" />
+          </label>
+        </div>
+
+        <div class="row row--between row--wrap spacer-top">
+          <button class="btn btn--soft" id="addBtn" type="button">Add to list</button>
+          <div class="row row--wrap">
+            <button class="btn btn--ghost btn--sm" id="clearListBtn" type="button">Clear</button>
+            <button class="btn btn--ghost btn--sm" id="exportListBtn" type="button">Copy JSON</button>
+          </div>
+        </div>
+
+        <div class="mini spacer-top">
+          <div class="mini__title">Current list</div>
+          <pre class="code" id="current">[]</pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row row--between row--wrap">
+          <h3 class="h3">Bulk JSON</h3>
+          <div class="row">
+            <button class="btn btn--ghost btn--sm" id="validateJsonBtn" type="button">Validate</button>
+            <button class="btn btn--ghost btn--sm" id="clearJsonBtn" type="button">Clear</button>
+          </div>
+        </div>
+
+        <textarea class="textarea spacer-top" id="bulk" rows="10"
+          placeholder='[{"id":1,"title":"...","due_date":"2025-11-30","estimated_hours":3,"importance":8,"dependencies":[]}]'></textarea>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel__header">
+        <h2 class="h2">Results</h2>
+        <div class="row row--wrap">
+          <div class="pill" id="strategyBadge">Strategy: smart_balance</div>
+          <button class="btn btn--ghost" id="suggestBtn" type="button">Get Top 3</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat__label">Total</div>
+          <div class="stat__value" id="statTotal">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">High</div>
+          <div class="stat__value" id="statHigh">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">Cycles</div>
+          <div class="stat__value" id="statCycles">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">Warnings</div>
+          <div class="stat__value" id="statWarnings">0</div>
+        </div>
+      </div>
+
+      <div class="alerts">
+        <div class="alert alert--info" id="infoBox" hidden></div>
+        <div class="alert alert--warn" id="warnBox" hidden></div>
+        <div class="alert alert--danger" id="errBox" hidden></div>
+      </div>
+
+      <div class="card">
+        <div class="row row--between row--wrap">
+          <div class="row row--wrap">
+            <label class="field field--inline">
+              <span class="field__label">Search</span>
+              <input class="input input--sm" id="search" type="text" placeholder="Search title / id" />
+            </label>
+
+            <label class="field field--inline">
+              <span class="field__label">Sort</span>
+              <select class="select select--sm sort-select" id="sort">
+                <option value="score_desc">Score (high → low)</option>
+                <option value="due_asc">Due date (soonest)</option>
+                <option value="impact_desc">Importance (high → low)</option>
+                <option value="hours_asc">Hours (smallest)</option>
+              </select>
+
+              <div class="sort-dropdown">
+                <div class="dd" id="sortDD">
+                  <button class="dd__btn" id="sortDDBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
+                    <span id="sortDDLabel">Score (high → low)</span>
+                    <span class="dd__chev" aria-hidden="true">▾</span>
+                  </button>
+                  <div class="dd__menu" id="sortDDMenu" role="listbox" aria-label="Sort" tabindex="-1">
+                    <button class="dd__item is-selected" type="button" data-value="score_desc">Score (high → low)</button>
+                    <button class="dd__item" type="button" data-value="due_asc">Due date (soonest)</button>
+                    <button class="dd__item" type="button" data-value="impact_desc">Importance (high → low)</button>
+                    <button class="dd__item" type="button" data-value="hours_asc">Hours (smallest)</button>
+                  </div>
+                </div>
+              </div>
+            </label>
+          </div>
+
+          <div class="row row--wrap">
+            <button class="btn btn--ghost btn--sm" id="collapseBtn" type="button">Collapse</button>
+            <button class="btn btn--ghost btn--sm" id="expandBtn" type="button">Expand</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="h3">Today’s Focus (Top 3)</h3>
+        <div class="focus" id="focus"></div>
+      </div>
+
+      <div class="card">
+        <h3 class="h3">All tasks</h3>
+        <div class="muted small" id="resultsMeta"></div>
+        <div class="list" id="results"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" aria-live="polite" aria-atomic="true" hidden>
+    <span id="toastText"></span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
