@@ -133,9 +133,8 @@ Here is how the algorithm handles specific real-world scenarios:
 
 We focused strictly on the **Data Intelligence** challenge (30 min) to make the scoring engine smarter:
 
-1.  **Date Intelligence:** The scoring engine now considers **weekends and holidays** (specifically Indian holidays) when calculating urgency. Instead of raw calendar days, it calculates "Working Days Remaining."
-2.  **Cycle Detection:** Implemented DFS to catch logical deadlocks (A $\rightarrow$ B $\rightarrow$ A).
-3.  **Explainable AI:** The API constructs a dynamic explanation string (e.g., *"U=85%, I=60%, Unblocks=3"*) so the user understands the math behind the rank.
+ **Date Intelligence:** The scoring engine now considers **weekends and holidays** (specifically Indian holidays) when calculating urgency. Instead of raw calendar days, it calculates "Working Days Remaining."
+
 
 -----
 
@@ -187,3 +186,4 @@ With more time, we would implement:
   * **Capacity Planning:** Warn users if "Today's Focus" exceeds 8 hours.
   * **Export:** Download ranked lists as PDF/CSV.
   * **Visuals:** Critical Path visualization using D3.js.
+
